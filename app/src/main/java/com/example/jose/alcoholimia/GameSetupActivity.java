@@ -16,6 +16,7 @@ import java.util.Collections;
 public class GameSetupActivity extends AppCompatActivity {
 
     public static int numPlayers;
+    public static int numRounds;
     public static ArrayList<String> players;
     public static ArrayList<Double> scores;
 
@@ -28,15 +29,18 @@ public class GameSetupActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                createArrays();
+                setupGame();
                 launchGame();
             }
 
         });
     }
 
-    private void createArrays() {
+    private void setupGame() {
+
         numPlayers = Integer.parseInt(((EditText) findViewById(R.id.etNumPlayers)).getText().toString());
+        numRounds = Integer.parseInt(((EditText) findViewById(R.id.etNumRounds)).getText().toString());
+
         players = new ArrayList<>(Collections.nCopies(numPlayers, ""));
         scores = new ArrayList<>(Collections.nCopies(numPlayers, 0D));
     }
