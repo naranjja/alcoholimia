@@ -25,7 +25,8 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:id="@+id/etNumPlayers"
-            android:text="5"/>
+            android:text="5"
+            android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout
@@ -42,13 +43,14 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:id="@+id/etNumRounds"
-            android:text="2"/>
+            android:text="2"
+            android:inputType="number"/>
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/bSubmit"/>
+        android:text="Start game"
+        android:id="@+id/bStartGame"/>
 
 </LinearLayout>

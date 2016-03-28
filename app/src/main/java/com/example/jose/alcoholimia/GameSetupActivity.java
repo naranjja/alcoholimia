@@ -26,7 +26,7 @@ public class GameSetupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setup);
 
-        findViewById(R.id.bSubmit).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bStartGame).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {

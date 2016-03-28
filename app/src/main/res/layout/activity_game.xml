@@ -11,6 +11,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".GameActivity">
 
+    <!-- Round information -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,19 +62,32 @@
             android:textOn="Done"/>
     </LinearLayout>
 
+    <!-- Buttons -->
 
-    <Button
-        android:id="@+id/bNextQuestion"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
-        android:visibility="visible"/>
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/bFinishGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Finish"
-        android:visibility="gone"/>
+        <Button
+            android:id="@+id/bNextQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:visibility="visible"/>
+
+        <Button
+            android:id="@+id/bFinishGame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Finish"
+            android:visibility="gone"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Skip"/>
+
+    </LinearLayout>
 
 </LinearLayout>

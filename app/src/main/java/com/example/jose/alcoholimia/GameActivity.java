@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,10 +21,12 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity {
 
     // todo: que estos array se pueblen automaticamente
-    ArrayList<String> easy = new ArrayList<>(Arrays.asList("easy1", "easy2", "easy3"));
+    ArrayList<String> easy = new ArrayList<>();
     ArrayList<String> medium = new ArrayList<>(Arrays.asList("medium1", "medium2", "medium3"));
     ArrayList<String> hard = new ArrayList<>(Arrays.asList("hard1", "hard2", "hard3"));
     ArrayList<String> extreme = new ArrayList<>(Arrays.asList("extreme1", "extreme2", "extreme3"));
+
+    private DaresDataSource datasource;
     private ArrayList<Double> difficultyAverage;
     private int currentPlayer = 0;
     private int round = 1;
@@ -32,6 +35,19 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        datasource = new DaresDataSource(this);
+
+        try {
+            datasource.open();
+
+            easy = datasource.getDares();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            datasource.close();
+        }
 
         difficultyAverage = new ArrayList<>(Collections.nCopies(GameSetupActivity.numPlayers, 0D));
         final Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
