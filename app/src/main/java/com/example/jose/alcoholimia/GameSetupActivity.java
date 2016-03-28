@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
+ * Game setup activity
  * Created by Jose on 3/27/2016.
  */
 
@@ -48,7 +49,6 @@ public class GameSetupActivity extends AppCompatActivity {
     private void launchGame() {
         Intent intent = new Intent(GameSetupActivity.this, GameActivity.class);
         startActivity(intent);
-        finish();
     }
 }
 

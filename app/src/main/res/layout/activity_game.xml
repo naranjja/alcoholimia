@@ -20,7 +20,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="player number"/>
+        android:text="player number"
+        android:id="@+id/tvPlayer"/>
 
     <!-- Question -->
     <LinearLayout
@@ -64,6 +65,14 @@
         android:id="@+id/bNextQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"/>
+        android:text="Next"
+        android:visibility="visible"/>
+
+    <Button
+        android:id="@+id/bFinishGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finish"
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.jose.alcoholimia;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.Random;
 
 /**
+ * Game activity
  * Created by Jose on 3/27/2016.
  */
 
@@ -32,7 +34,12 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         difficultyAverage = new ArrayList<>(Collections.nCopies(GameSetupActivity.numPlayers, 0D));
-        Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
+        final Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
+        final Button bFinishGame = (Button) findViewById(R.id.bFinishGame);
+
+        ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
+        ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
+        generateRandomQuestion();
 
         // todo: boton change dare, -puntos (% of something)
 
@@ -40,14 +47,38 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                ((TextView) findViewById(R.id.tvRound)).setText(String.valueOf(round));
+
+                // go to next player
+                if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
+                    currentPlayer++;
+                }
+
+                // go to next round
+                if (currentPlayer == GameSetupActivity.numPlayers) {
+                    currentPlayer = 0;
+                    round++;
+                }
+
+                // update name of round and player
+                ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
+                ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
+
+                // generate a new random question
                 generateRandomQuestion();
 
-                if (round <= GameSetupActivity.numRounds) {
-                    round++;
-                } else {
-                    ((TextView) findViewById(R.id.tvRound)).setText("done");
+                // if last turn of the game, show finish button
+                if (currentPlayer + 1 == GameSetupActivity.numPlayers && round == GameSetupActivity.numRounds) {
+                    bNextQuestion.setVisibility(View.GONE);
+                    bFinishGame.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        bFinishGame.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                launchResults();
             }
         });
 
@@ -109,10 +140,16 @@ public class GameActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tvRandText)).setText(randomString);
 
         difficultyAverage.set(currentPlayer,
-                (difficultyAverage.get(currentPlayer) + difficulty) / Math.ceil(round / GameSetupActivity.numPlayers)
+                (difficultyAverage.get(currentPlayer) + difficulty) / Math.ceil((double) round / (double) GameSetupActivity.numPlayers)
         );
-
     }
+
+    private void launchResults() {
+        Intent intent = new Intent(GameActivity.this, ResultsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }
 
 
