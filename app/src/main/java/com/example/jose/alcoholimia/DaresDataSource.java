@@ -72,10 +72,10 @@ public class DaresDataSource {
         return dares;
     }
 
-    public ArrayList<String> getDares() throws Exception {
+    public ArrayList<String> getEasyDares() throws Exception {
 
         ArrayList<String> dares = null;
-        Cursor cursor = database.rawQuery("SELECT DARE FROM DARES", null);
+        Cursor cursor = database.rawQuery("SELECT DARE FROM DARES WHERE DRINKS = 1", null);
 
         if (cursor.moveToFirst()) {
             dares = new ArrayList<>();

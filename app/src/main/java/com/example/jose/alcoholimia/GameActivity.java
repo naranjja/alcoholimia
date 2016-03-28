@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,7 +25,6 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<String> hard = new ArrayList<>(Arrays.asList("hard1", "hard2", "hard3"));
     ArrayList<String> extreme = new ArrayList<>(Arrays.asList("extreme1", "extreme2", "extreme3"));
 
-    private DaresDataSource datasource;
     private ArrayList<Double> difficultyAverage;
     private int currentPlayer = 0;
     private int round = 1;
@@ -36,20 +34,24 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        datasource = new DaresDataSource(this);
+        DaresDataSource datasource = new DaresDataSource(this);
 
         try {
             datasource.open();
 
-            easy = datasource.getDares();
+            easy = datasource.getEasyDares();
+
 
         } catch (Exception e) {
             e.printStackTrace();
+
         } finally {
             datasource.close();
         }
 
         difficultyAverage = new ArrayList<>(Collections.nCopies(GameSetupActivity.numPlayers, 0D));
+
+
         final Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
         final Button bFinishGame = (Button) findViewById(R.id.bFinishGame);
 
@@ -102,6 +104,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void generateRandomQuestion() {
 
+        TextView tvDrinks = (TextView) findViewById(R.id.tvDrinks);
         ArrayList<String> currentDifficulty = new ArrayList<>();
 
         Random random = new Random();
@@ -138,15 +141,19 @@ public class GameActivity extends AppCompatActivity {
         switch (difficulty) {
             case 1:
                 currentDifficulty = easy;
+                tvDrinks.setText("1 drink");
                 break;
             case 2:
                 currentDifficulty = medium;
+                tvDrinks.setText("2 drinks");
                 break;
             case 3:
                 currentDifficulty = hard;
+                tvDrinks.setText("3 drinks");
                 break;
             case 4:
                 currentDifficulty = extreme;
+                tvDrinks.setText("4 drinks");
                 break;
         }
 
