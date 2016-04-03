@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -25,13 +26,12 @@ public class GameActivity extends AppCompatActivity {
     ArrayList<String> medium = new ArrayList<>(Arrays.asList("medium1", "medium2", "medium3"));
     ArrayList<String> hard = new ArrayList<>(Arrays.asList("hard1", "hard2", "hard3"));
     ArrayList<String> extreme = new ArrayList<>(Arrays.asList("extreme1", "extreme2", "extreme3"));
-
-    private ArrayList<Double> difficultyAverage;
-    private int currentPlayer = 0;
-    private int round = 1;
     int difficulty = 1;
     boolean didDare = false;
     boolean didDrink = false;
+    private ArrayList<Double> difficultyAverage;
+    private int currentPlayer = 0;
+    private int round = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class GameActivity extends AppCompatActivity {
         final ToggleButton tbDrinks = (ToggleButton) findViewById(R.id.tbDrinks);
         final Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
         final Button bFinishGame = (Button) findViewById(R.id.bFinishGame);
+        final Button bSkip = (Button) findViewById(R.id.bSkip);
 
         // Initial round
         ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
@@ -67,17 +68,16 @@ public class GameActivity extends AppCompatActivity {
 
         // todo: boton change dare, -puntos (% of something)
 
-        bNextQuestion.setOnClickListener(new View.OnClickListener() {
+        bSkip.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
 
-                didDare = tbQuestion.isChecked();
-                didDrink = tbDrinks.isChecked();
+                // todo: dialog are you sure?
 
                 // go to next player
                 if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
-                    addPoints(difficulty, currentPlayer, didDare, didDrink);
+                    // todo: penalty for skipping?
                     currentPlayer++;
                 }
 
@@ -97,6 +97,7 @@ public class GameActivity extends AppCompatActivity {
                 // if last turn of the game, show finish button
                 if (currentPlayer + 1 == GameSetupActivity.numPlayers && round == GameSetupActivity.numRounds) {
                     bNextQuestion.setVisibility(View.GONE);
+                    bSkip.setVisibility(View.GONE);
                     bFinishGame.setVisibility(View.VISIBLE);
                 }
 
@@ -105,7 +106,50 @@ public class GameActivity extends AppCompatActivity {
 
                 didDare = false;
                 didDrink = false;
+            }
+        });
 
+        bNextQuestion.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                didDare = tbQuestion.isChecked();
+                didDrink = tbDrinks.isChecked();
+
+                if (didDare || didDrink) {
+                    // go to next player
+                    if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
+                        addPoints(difficulty, currentPlayer, didDare, didDrink);
+                        currentPlayer++;
+                    }
+
+                    // go to next round
+                    if (currentPlayer == GameSetupActivity.numPlayers) {
+                        currentPlayer = 0;
+                        round++;
+                    }
+
+                    // update name of round and player
+                    ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
+                    ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
+
+                    // generate a new random question
+                    generateRandomQuestion();
+
+                    // if last turn of the game, show finish button
+                    if (currentPlayer + 1 == GameSetupActivity.numPlayers && round == GameSetupActivity.numRounds) {
+                        bNextQuestion.setVisibility(View.GONE);
+                        bSkip.setVisibility(View.GONE);
+                        bFinishGame.setVisibility(View.VISIBLE);
+                    }
+
+                    tbQuestion.setChecked(false);
+                    tbDrinks.setChecked(false);
+
+                    didDare = false;
+                    didDrink = false;
+                }
             }
         });
 
@@ -117,7 +161,11 @@ public class GameActivity extends AppCompatActivity {
                 didDare = tbQuestion.isChecked();
                 didDrink = tbDrinks.isChecked();
 
-                addPoints(difficulty, currentPlayer, didDare, didDrink);
+                if (didDare || didDrink) {
+                    addPoints(difficulty, currentPlayer, didDare, didDrink);
+                } else {
+                    // todo: penalty for skipping?
+                }
 
                 launchResults();
             }
