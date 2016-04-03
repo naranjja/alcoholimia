@@ -57,16 +57,26 @@ public class GameActivity extends AppCompatActivity {
 
         final ToggleButton tbQuestion = (ToggleButton) findViewById(R.id.tbQuestion);
         final ToggleButton tbDrinks = (ToggleButton) findViewById(R.id.tbDrinks);
+
         final Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
         final Button bFinishGame = (Button) findViewById(R.id.bFinishGame);
         final Button bSkip = (Button) findViewById(R.id.bSkip);
+        final Button bReRoll = (Button) findViewById(R.id.bReRoll);
+
 
         // Initial round
         ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
         ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
         generateRandomQuestion();
 
-        // todo: boton change dare, -puntos (% of something)
+        bReRoll.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                removePoints(currentPlayer, 3D);
+                generateRandomQuestion();
+            }
+        });
 
         bSkip.setOnClickListener(new View.OnClickListener() {
 
@@ -77,7 +87,6 @@ public class GameActivity extends AppCompatActivity {
 
                 // go to next player
                 if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
-                    // todo: penalty for skipping?
                     currentPlayer++;
                 }
 
@@ -163,8 +172,6 @@ public class GameActivity extends AppCompatActivity {
 
                 if (didDare || didDrink) {
                     addPoints(difficulty, currentPlayer, didDare, didDrink);
-                } else {
-                    // todo: penalty for skipping?
                 }
 
                 launchResults();
@@ -230,41 +237,45 @@ public class GameActivity extends AppCompatActivity {
         );
     }
 
+    private void removePoints(int currentPlayer, double points) {
+        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) - points);
+    }
+
     private void addPoints(int difficulty, int currentPlayer, boolean didDare, boolean didDrink) {
         switch (difficulty) {
             case 1:
                 if (didDare || didDrink) {
                     if (didDare && didDrink) {
-                        GameSetupActivity.scores.set(currentPlayer, 2D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 2D);
                     } else {
-                        GameSetupActivity.scores.set(currentPlayer, 1D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 1D);
                     }
                 }
                 break;
             case 2:
                 if (didDare || didDrink) {
                     if (didDare && didDrink) {
-                        GameSetupActivity.scores.set(currentPlayer, 4D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 4D);
                     } else {
-                        GameSetupActivity.scores.set(currentPlayer, 2D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 2D);
                     }
                 }
                 break;
             case 3:
                 if (didDare || didDrink) {
                     if (didDare && didDrink) {
-                        GameSetupActivity.scores.set(currentPlayer, 6D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 6D);
                     } else {
-                        GameSetupActivity.scores.set(currentPlayer, 3D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 3D);
                     }
                 }
                 break;
             case 4:
                 if (didDare || didDrink) {
                     if (didDare && didDrink) {
-                        GameSetupActivity.scores.set(currentPlayer, 8D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 8D);
                     } else {
-                        GameSetupActivity.scores.set(currentPlayer, 4D);
+                        GameSetupActivity.scores.set(currentPlayer, GameSetupActivity.scores.get(currentPlayer) + 4D);
                     }
                 }
                 break;

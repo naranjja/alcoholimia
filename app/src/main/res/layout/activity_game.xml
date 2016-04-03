@@ -94,6 +94,12 @@
             android:layout_height="wrap_content"
             android:text="Skip"/>
 
+        <Button
+            android:id="@+id/bReRoll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reroll"/>
+
     </LinearLayout>
 
 </LinearLayout>
