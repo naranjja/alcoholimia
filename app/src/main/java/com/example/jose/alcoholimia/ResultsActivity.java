@@ -9,6 +9,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 /**
  * Results activity
  * Created by Jose on 3/27/2016.
@@ -29,11 +31,12 @@ public class ResultsActivity extends AppCompatActivity {
         tableResults.addView(createTableHeaders());
 
         for (int i = 0; i < GameSetupActivity.numPlayers; i++) {
-            tableResults.addView(createTableRow(i+1, GameSetupActivity.scores.get(i)));
+            tableResults.addView(createTableRow(i+1, GameSetupActivity.scores.get(i), GameSetupActivity.drinks.get(i)));
         }
     }
 
-    public TableRow createTableRow(int playerNumber, double playerScore) {
+    public TableRow createTableRow(int playerNumber, double playerScore, double playerDrinks) {
+        DecimalFormat formatter = new DecimalFormat("#,###,###,##0.00");
         TableRow row = new TableRow(this);
 
         TextView tvPlayerNumber = new TextView(this);
@@ -42,9 +45,14 @@ public class ResultsActivity extends AppCompatActivity {
         row.addView(tvPlayerNumber);
 
         TextView tvPlayerScore = new TextView(this);
-        tvPlayerScore.setText(Double.toString(playerScore));
+        tvPlayerScore.setText(formatter.format(playerScore));
         formatCell(tvPlayerScore);
         row.addView(tvPlayerScore);
+
+        TextView tvPlayerDrinks = new TextView(this);
+        tvPlayerDrinks.setText(formatter.format(playerDrinks));
+        formatCell(tvPlayerDrinks);
+        row.addView(tvPlayerDrinks);
 
         return row;
     }
@@ -61,6 +69,11 @@ public class ResultsActivity extends AppCompatActivity {
         tvHeaderPlayerScore.setText("Score");
         formatCell(tvHeaderPlayerScore);
         row.addView(tvHeaderPlayerScore);
+
+        TextView tvHeaderPlayerDrinks = new TextView(this);
+        tvHeaderPlayerDrinks.setText("mL");
+        formatCell(tvHeaderPlayerDrinks);
+        row.addView(tvHeaderPlayerDrinks);
 
         return row;
     }

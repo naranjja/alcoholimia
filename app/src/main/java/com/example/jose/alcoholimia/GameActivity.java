@@ -130,6 +130,7 @@ public class GameActivity extends AppCompatActivity {
                     // go to next player
                     if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
                         addPoints(difficulty, currentPlayer, didDare, didDrink);
+                        if (didDrink) addDrink(difficulty, currentPlayer);
                         currentPlayer++;
                     }
 
@@ -211,19 +212,19 @@ public class GameActivity extends AppCompatActivity {
         switch (difficulty) {
             case 1:
                 currentDifficulty = easy;
-                tvDrinks.setText("1 drink");
+                tvDrinks.setText(GameSetupActivity.drinkType);
                 break;
             case 2:
                 currentDifficulty = medium;
-                tvDrinks.setText("2 drinks");
+                tvDrinks.setText("2 " + GameSetupActivity.drinkTypePlural);
                 break;
             case 3:
                 currentDifficulty = hard;
-                tvDrinks.setText("3 drinks");
+                tvDrinks.setText("3 " + GameSetupActivity.drinkTypePlural);
                 break;
             case 4:
                 currentDifficulty = extreme;
-                tvDrinks.setText("4 drinks");
+                tvDrinks.setText("4 " + GameSetupActivity.drinkTypePlural);
                 break;
         }
 
@@ -235,6 +236,11 @@ public class GameActivity extends AppCompatActivity {
         difficultyAverage.set(currentPlayer,
                 (difficultyAverage.get(currentPlayer) + difficulty) / Math.ceil((double) round / (double) GameSetupActivity.numPlayers)
         );
+    }
+
+    private void addDrink(int difficulty, int currentPlayer){
+        GameSetupActivity.drinks.set(currentPlayer,
+                GameSetupActivity.drinks.get(currentPlayer) + GameSetupActivity.drinkLevel * (double) difficulty);
     }
 
     private void removePoints(int currentPlayer, double points) {
