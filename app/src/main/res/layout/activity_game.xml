@@ -38,10 +38,12 @@
             android:text="question"/>
 
         <ToggleButton
+            android:id="@+id/tbQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textOff="Not done"
-            android:textOn="Done"/>
+            android:textOn="Done"
+            android:checked="false"/>
     </LinearLayout>
 
     <!-- Drinks -->
@@ -57,10 +59,12 @@
             android:id="@+id/tvDrinks"/>
 
         <ToggleButton
+            android:id="@+id/tbDrinks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textOff="Not done"
-            android:textOn="Done"/>
+            android:textOn="Done"
+            android:checked="false"/>
     </LinearLayout>
 
     <!-- Buttons -->

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +29,9 @@ public class GameActivity extends AppCompatActivity {
     private ArrayList<Double> difficultyAverage;
     private int currentPlayer = 0;
     private int round = 1;
+    int difficulty = 1;
+    boolean didDare = false;
+    boolean didDrink = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +55,12 @@ public class GameActivity extends AppCompatActivity {
 
         difficultyAverage = new ArrayList<>(Collections.nCopies(GameSetupActivity.numPlayers, 0D));
 
-
+        final ToggleButton tbQuestion = (ToggleButton) findViewById(R.id.tbQuestion);
+        final ToggleButton tbDrinks = (ToggleButton) findViewById(R.id.tbDrinks);
         final Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
         final Button bFinishGame = (Button) findViewById(R.id.bFinishGame);
 
+        // Initial round
         ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
         ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
         generateRandomQuestion();
@@ -66,8 +72,12 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                didDare = tbQuestion.isChecked();
+                didDrink = tbDrinks.isChecked();
+
                 // go to next player
                 if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
+                    addPoints(difficulty, currentPlayer, didDare, didDrink);
                     currentPlayer++;
                 }
 
@@ -89,6 +99,13 @@ public class GameActivity extends AppCompatActivity {
                     bNextQuestion.setVisibility(View.GONE);
                     bFinishGame.setVisibility(View.VISIBLE);
                 }
+
+                tbQuestion.setChecked(false);
+                tbDrinks.setChecked(false);
+
+                didDare = false;
+                didDrink = false;
+
             }
         });
 
@@ -96,6 +113,12 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+
+                didDare = tbQuestion.isChecked();
+                didDrink = tbDrinks.isChecked();
+
+                addPoints(difficulty, currentPlayer, didDare, didDrink);
+
                 launchResults();
             }
         });
@@ -109,31 +132,23 @@ public class GameActivity extends AppCompatActivity {
 
         Random random = new Random();
 
-        int difficulty = 1;
-
         if (round == 1) {
-            difficulty = random.nextInt(4) + 1; // completely random
+            difficulty = random.nextInt(4) + 1;
 
         } else {
-            double difavg = Math.floor(difficultyAverage.get(currentPlayer));
-            if (difavg == 1) {
-                // 3 o 4
+            double currentAverage = Math.floor(difficultyAverage.get(currentPlayer));
+            if (currentAverage == 1) {
                 difficulty = random.nextInt(2) + 3;
             }
-            if (difavg == 2) {
-                // reset average
+            if (currentAverage == 2) {
                 difficultyAverage.set(currentPlayer, 1D);
-                // completely random
                 difficulty = random.nextInt(4) + 1;
             }
-            if (difavg == 3) {
-                // reset average
+            if (currentAverage == 3) {
                 difficultyAverage.set(currentPlayer, 1D);
-                // completely random
                 difficulty = random.nextInt(4) + 1;
             }
-            if (difavg == 4) {
-                // 1 o 2
+            if (currentAverage == 4) {
                 difficulty = random.nextInt(2) + 1;
             }
         }
@@ -165,6 +180,47 @@ public class GameActivity extends AppCompatActivity {
         difficultyAverage.set(currentPlayer,
                 (difficultyAverage.get(currentPlayer) + difficulty) / Math.ceil((double) round / (double) GameSetupActivity.numPlayers)
         );
+    }
+
+    private void addPoints(int difficulty, int currentPlayer, boolean didDare, boolean didDrink) {
+        switch (difficulty) {
+            case 1:
+                if (didDare || didDrink) {
+                    if (didDare && didDrink) {
+                        GameSetupActivity.scores.set(currentPlayer, 2D);
+                    } else {
+                        GameSetupActivity.scores.set(currentPlayer, 1D);
+                    }
+                }
+                break;
+            case 2:
+                if (didDare || didDrink) {
+                    if (didDare && didDrink) {
+                        GameSetupActivity.scores.set(currentPlayer, 4D);
+                    } else {
+                        GameSetupActivity.scores.set(currentPlayer, 2D);
+                    }
+                }
+                break;
+            case 3:
+                if (didDare || didDrink) {
+                    if (didDare && didDrink) {
+                        GameSetupActivity.scores.set(currentPlayer, 6D);
+                    } else {
+                        GameSetupActivity.scores.set(currentPlayer, 3D);
+                    }
+                }
+                break;
+            case 4:
+                if (didDare || didDrink) {
+                    if (didDare && didDrink) {
+                        GameSetupActivity.scores.set(currentPlayer, 8D);
+                    } else {
+                        GameSetupActivity.scores.set(currentPlayer, 4D);
+                    }
+                }
+                break;
+        }
     }
 
     private void launchResults() {
