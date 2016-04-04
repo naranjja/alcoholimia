@@ -10,12 +10,16 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
 
 /**
  * Results activity
  * Created by Jose on 3/27/2016.
  */
 public class ResultsActivity extends AppCompatActivity {
+
+    double maxScore = Collections.max(GameSetupActivity.scores);
+    double minScore = Collections.min(GameSetupActivity.scores);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,7 @@ public class ResultsActivity extends AppCompatActivity {
         mScrollView.smoothScrollTo(0, layoutResults.getHeight());
 
         tableResults.addView(createTableHeaders());
+
 
         for (int i = 0; i < GameSetupActivity.numPlayers; i++) {
             tableResults.addView(createTableRow(i+1, GameSetupActivity.scores.get(i), GameSetupActivity.drinks.get(i)));
@@ -53,6 +58,20 @@ public class ResultsActivity extends AppCompatActivity {
         tvPlayerDrinks.setText(formatter.format(playerDrinks));
         formatCell(tvPlayerDrinks);
         row.addView(tvPlayerDrinks);
+
+        TextView Result = new TextView(this);
+
+        if (playerScore == maxScore) {
+            Result.setText("Winner");
+            formatCell(Result);
+            row.addView(Result);
+        }
+
+        else if (playerScore == minScore) {
+            Result.setText("Loser");
+            formatCell(Result);
+            row.addView(Result);
+        }
 
         return row;
     }
@@ -84,7 +103,6 @@ public class ResultsActivity extends AppCompatActivity {
         cell.setPadding(30,20,30,20);
         cell.setHeight(150);
         cell.setWidth(300);
-
     }
 
 }
