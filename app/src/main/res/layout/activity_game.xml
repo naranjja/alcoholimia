@@ -2,8 +2,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -14,90 +15,77 @@
     <!-- Round information -->
 
     <TextView
+        android:id="@+id/tvRound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="round number"
-        android:id="@+id/tvRound"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"/>
 
     <TextView
+        android:id="@+id/tvPlayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="player number"
-        android:id="@+id/tvPlayer"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:textSize="25sp"/>
 
     <!-- Question -->
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <ToggleButton
+        android:id="@+id/tbQuestion"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvRandText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="question"/>
-
-        <ToggleButton
-            android:id="@+id/tbQuestion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOff="Not done"
-            android:textOn="Done"
-            android:checked="false"/>
-    </LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        />
 
     <!-- Drinks -->
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <ToggleButton
+        android:id="@+id/tbDrinks"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="number of drinks"
-            android:id="@+id/tvDrinks"/>
-
-        <ToggleButton
-            android:id="@+id/tbDrinks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOff="Not done"
-            android:textOn="Done"
-            android:checked="false"/>
-    </LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        />
 
     <!-- Buttons -->
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/bNextQuestion"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Next"
             android:visibility="visible"/>
 
         <Button
             android:id="@+id/bFinishGame"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Finish"
             android:visibility="gone"/>
 
         <Button
             android:id="@+id/bSkip"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Skip"/>
 
         <Button
             android:id="@+id/bReRoll"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Reroll"/>
 
     </LinearLayout>

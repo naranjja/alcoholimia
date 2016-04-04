@@ -32,6 +32,9 @@ public class GameActivity extends AppCompatActivity {
     private ArrayList<Double> difficultyAverage;
     private int currentPlayer = 0;
     private int round = 1;
+    private ToggleButton tbQuestion;
+    private ToggleButton tbDrinks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,26 +58,26 @@ public class GameActivity extends AppCompatActivity {
 
         difficultyAverage = new ArrayList<>(Collections.nCopies(GameSetupActivity.numPlayers, 0D));
 
-        final ToggleButton tbQuestion = (ToggleButton) findViewById(R.id.tbQuestion);
-        final ToggleButton tbDrinks = (ToggleButton) findViewById(R.id.tbDrinks);
+        tbQuestion = (ToggleButton) findViewById(R.id.tbQuestion);
+        tbDrinks = (ToggleButton) findViewById(R.id.tbDrinks);
 
         final Button bNextQuestion = (Button) findViewById(R.id.bNextQuestion);
         final Button bFinishGame = (Button) findViewById(R.id.bFinishGame);
         final Button bSkip = (Button) findViewById(R.id.bSkip);
         final Button bReRoll = (Button) findViewById(R.id.bReRoll);
 
-
         // Initial round
         ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
         ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
-        generateRandomQuestion();
+
+        generateRandomQuestion(tbQuestion, tbDrinks);
 
         bReRoll.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 removePoints(currentPlayer, 3D);
-                generateRandomQuestion();
+                generateRandomQuestion(tbQuestion, tbDrinks);
             }
         });
 
@@ -101,11 +104,11 @@ public class GameActivity extends AppCompatActivity {
                 ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
 
                 // generate a new random question
-                generateRandomQuestion();
+                generateRandomQuestion(tbQuestion, tbDrinks);
 
                 // if last turn of the game, show finish button
                 if (currentPlayer + 1 == GameSetupActivity.numPlayers && round == GameSetupActivity.numRounds) {
-                    bNextQuestion.setVisibility(View.GONE);
+                    bNextQuestion.setEnabled(false);
                     bSkip.setVisibility(View.GONE);
                     bFinishGame.setVisibility(View.VISIBLE);
                 }
@@ -145,11 +148,11 @@ public class GameActivity extends AppCompatActivity {
                     ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
 
                     // generate a new random question
-                    generateRandomQuestion();
+                    generateRandomQuestion(tbQuestion, tbDrinks);
 
                     // if last turn of the game, show finish button
                     if (currentPlayer + 1 == GameSetupActivity.numPlayers && round == GameSetupActivity.numRounds) {
-                        bNextQuestion.setVisibility(View.GONE);
+                        bNextQuestion.setEnabled(false);
                         bSkip.setVisibility(View.GONE);
                         bFinishGame.setVisibility(View.VISIBLE);
                     }
@@ -181,9 +184,8 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    private void generateRandomQuestion() {
+    private void generateRandomQuestion(ToggleButton tbQuestion, ToggleButton tbDrinks) {
 
-        TextView tvDrinks = (TextView) findViewById(R.id.tvDrinks);
         ArrayList<String> currentDifficulty = new ArrayList<>();
 
         Random random = new Random();
@@ -212,26 +214,36 @@ public class GameActivity extends AppCompatActivity {
         switch (difficulty) {
             case 1:
                 currentDifficulty = easy;
-                tvDrinks.setText(GameSetupActivity.drinkType);
+                tbDrinks.setTextOn(GameSetupActivity.drinkType);
+                tbDrinks.setTextOff(GameSetupActivity.drinkType);
+                tbDrinks.setText(GameSetupActivity.drinkType);
                 break;
             case 2:
                 currentDifficulty = medium;
-                tvDrinks.setText("2 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setTextOn("2 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setTextOff("2 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setText("2 " + GameSetupActivity.drinkTypePlural);
                 break;
             case 3:
                 currentDifficulty = hard;
-                tvDrinks.setText("3 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setTextOn("3 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setTextOff("3 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setText("3 " + GameSetupActivity.drinkTypePlural);
                 break;
             case 4:
                 currentDifficulty = extreme;
-                tvDrinks.setText("4 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setTextOn("4 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setTextOff("4 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setText("4 " + GameSetupActivity.drinkTypePlural);
                 break;
         }
 
         int questionIndex = random.nextInt(currentDifficulty.size());
 
         String randomString = currentDifficulty.get(questionIndex);
-        ((TextView) findViewById(R.id.tvRandText)).setText(randomString);
+        tbQuestion.setTextOn(randomString);
+        tbQuestion.setTextOff(randomString);
+        tbQuestion.setText(randomString);
 
         difficultyAverage.set(currentPlayer,
                 (difficultyAverage.get(currentPlayer) + difficulty) / Math.ceil((double) round / (double) GameSetupActivity.numPlayers)
