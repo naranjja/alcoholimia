@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,18 +92,19 @@ public class GameSetupActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                setupGame();
-                launchGame();
+
+                getInfo();
+
+                if (validateInfo()) {
+                    setupGame();
+                    launchGame();
+                }
             }
 
         });
     }
 
     private void setupGame() {
-
-        numPlayers = Integer.parseInt(((EditText) findViewById(R.id.etNumPlayers)).getText().toString());
-        numRounds = Integer.parseInt(((EditText) findViewById(R.id.etNumRounds)).getText().toString());
-
         players = new ArrayList<>(Collections.nCopies(numPlayers, ""));
         scores = new ArrayList<>(Collections.nCopies(numPlayers, 0D));
         drinks = new ArrayList<>(Collections.nCopies(numPlayers, 0D));
@@ -111,6 +113,27 @@ public class GameSetupActivity extends AppCompatActivity {
     private void launchGame() {
         Intent intent = new Intent(GameSetupActivity.this, GameActivity.class);
         startActivity(intent);
+    }
+
+    private boolean validateInfo() {
+        if (numPlayers < 1) {
+            Toast.makeText(this, "Not enough players", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        else if (numRounds < 1) {
+            Toast.makeText(this, "Not enough rounds", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        else {
+            return true;
+        }
+    }
+
+    private void getInfo() {
+        numPlayers = Integer.parseInt(((EditText) findViewById(R.id.etNumPlayers)).getText().toString());
+        numRounds = Integer.parseInt(((EditText) findViewById(R.id.etNumRounds)).getText().toString());
     }
 }
 
