@@ -87,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 
 //                builder.setTitle("Confirm");

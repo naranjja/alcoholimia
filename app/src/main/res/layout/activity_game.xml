@@ -38,6 +38,8 @@
         android:layout_gravity="center_horizontal"
         android:paddingBottom="40dp"
         android:paddingTop="40dp"
+        android:background="@drawable/toggle_selector"
+        android:layout_marginBottom="20dp"
         />
 
     <!-- Drinks -->
@@ -48,6 +50,8 @@
         android:layout_gravity="center_horizontal"
         android:paddingBottom="40dp"
         android:paddingTop="40dp"
+        android:background="@drawable/toggle_selector"
+        android:layout_marginBottom="20dp"
         />
 
     <!-- Buttons -->
