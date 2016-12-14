@@ -1,7 +1,9 @@
 package com.example.jose.alcoholimia;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -67,8 +69,8 @@ public class GameActivity extends AppCompatActivity {
         final Button bReRoll = (Button) findViewById(R.id.bReRoll);
 
         // Initial round
-        ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
-        ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
+        ((TextView) findViewById(R.id.tvRound)).setText(String.format("Round %s", String.valueOf(round)));
+        ((TextView) findViewById(R.id.tvPlayer)).setText(String.format("Player %s", String.valueOf(currentPlayer + 1)));
 
         generateRandomQuestion(tbQuestion, tbDrinks);
 
@@ -85,39 +87,60 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 
-                // todo: dialog are you sure?
+//                builder.setTitle("Confirm");
+                builder.setMessage("Are you sure you want to skip?");
 
-                // go to next player
-                if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
-                    currentPlayer++;
-                }
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-                // go to next round
-                if (currentPlayer == GameSetupActivity.numPlayers) {
-                    currentPlayer = 0;
-                    round++;
-                }
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
 
-                // update name of round and player
-                ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
-                ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
+                        // go to next player
+                        if (currentPlayer + 1 <= GameSetupActivity.numPlayers) {
+                            currentPlayer++;
+                        }
 
-                // generate a new random question
-                generateRandomQuestion(tbQuestion, tbDrinks);
+                        // go to next round
+                        if (currentPlayer == GameSetupActivity.numPlayers) {
+                            currentPlayer = 0;
+                            round++;
+                        }
 
-                // if last turn of the game, show finish button
-                if (currentPlayer + 1 == GameSetupActivity.numPlayers && round == GameSetupActivity.numRounds) {
-                    bNextQuestion.setEnabled(false);
-                    bSkip.setVisibility(View.GONE);
-                    bFinishGame.setVisibility(View.VISIBLE);
-                }
+                        // update name of round and player
+                        ((TextView) findViewById(R.id.tvRound)).setText(String.format("Round %s", String.valueOf(round)));
+                        ((TextView) findViewById(R.id.tvPlayer)).setText(String.format("Player %s", String.valueOf(currentPlayer + 1)));
 
-                tbQuestion.setChecked(false);
-                tbDrinks.setChecked(false);
+                        // generate a new random question
+                        generateRandomQuestion(tbQuestion, tbDrinks);
 
-                didDare = false;
-                didDrink = false;
+                        // if last turn of the game, show finish button
+                        if (currentPlayer + 1 == GameSetupActivity.numPlayers && round == GameSetupActivity.numRounds) {
+                            bNextQuestion.setEnabled(false);
+                            bSkip.setVisibility(View.GONE);
+                            bFinishGame.setVisibility(View.VISIBLE);
+                        }
+
+                        tbQuestion.setChecked(false);
+                        tbDrinks.setChecked(false);
+
+                        didDare = false;
+                        didDrink = false;
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
 
@@ -144,8 +167,8 @@ public class GameActivity extends AppCompatActivity {
                     }
 
                     // update name of round and player
-                    ((TextView) findViewById(R.id.tvRound)).setText("Round " + String.valueOf(round));
-                    ((TextView) findViewById(R.id.tvPlayer)).setText("Player " + String.valueOf(currentPlayer + 1));
+                    ((TextView) findViewById(R.id.tvRound)).setText(String.format("Round %s", String.valueOf(round)));
+                    ((TextView) findViewById(R.id.tvPlayer)).setText(String.format("Player %s", String.valueOf(currentPlayer + 1)));
 
                     // generate a new random question
                     generateRandomQuestion(tbQuestion, tbDrinks);
@@ -222,19 +245,19 @@ public class GameActivity extends AppCompatActivity {
                 currentDifficulty = medium;
                 tbDrinks.setTextOn("2 " + GameSetupActivity.drinkTypePlural);
                 tbDrinks.setTextOff("2 " + GameSetupActivity.drinkTypePlural);
-                tbDrinks.setText("2 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setText(String.format("2 %s", GameSetupActivity.drinkTypePlural));
                 break;
             case 3:
                 currentDifficulty = hard;
                 tbDrinks.setTextOn("3 " + GameSetupActivity.drinkTypePlural);
                 tbDrinks.setTextOff("3 " + GameSetupActivity.drinkTypePlural);
-                tbDrinks.setText("3 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setText(String.format("3 %s", GameSetupActivity.drinkTypePlural));
                 break;
             case 4:
                 currentDifficulty = extreme;
                 tbDrinks.setTextOn("4 " + GameSetupActivity.drinkTypePlural);
                 tbDrinks.setTextOff("4 " + GameSetupActivity.drinkTypePlural);
-                tbDrinks.setText("4 " + GameSetupActivity.drinkTypePlural);
+                tbDrinks.setText(String.format("4 %s", GameSetupActivity.drinkTypePlural));
                 break;
         }
 
