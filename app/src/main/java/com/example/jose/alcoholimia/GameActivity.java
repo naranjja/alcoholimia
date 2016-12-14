@@ -1,5 +1,6 @@
 package com.example.jose.alcoholimia;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,35 @@ public class GameActivity extends AppCompatActivity {
     private int round = 1;
     private ToggleButton tbQuestion;
     private ToggleButton tbDrinks;
+
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Warning!")
+                .setMessage("Do you want to end the game?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        Dialog dialog = (Dialog) dialogInterface;
+                        new AlertDialog.Builder(dialog.getContext())
+                                .setTitle("Last warning!")
+                                .setMessage("Are you completely, 100% sure you want to end the game?")
+                                .setPositiveButton("YES, GAME OVER ALREADY!", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+
+                                })
+                                .setNegativeButton("NO, SORRY! MY FINGERS ARE SLIPPERY", null)
+                                .show();
+                    }
+
+                })
+                .setNegativeButton("NO, IT WAS AN ACCIDENT!", null)
+                .show();
+    }
 
 
     @Override
@@ -78,8 +108,31 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                removePoints(currentPlayer, 3D);
-                generateRandomQuestion(tbQuestion, tbDrinks);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+                builder.setMessage("Rerolling removes 3 points. Are you sure you want to reroll?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                        removePoints(currentPlayer, 3D);
+                        generateRandomQuestion(tbQuestion, tbDrinks);
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
 
@@ -90,7 +143,6 @@ public class GameActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 
-//                builder.setTitle("Confirm");
                 builder.setMessage("Are you sure you want to skip?");
 
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -185,6 +237,8 @@ public class GameActivity extends AppCompatActivity {
 
                     didDare = false;
                     didDrink = false;
+                } else {
+                    Toast.makeText(view.getContext(), "You must do a dare, drink, skip or reroll!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -273,7 +327,7 @@ public class GameActivity extends AppCompatActivity {
         );
     }
 
-    private void addDrink(int difficulty, int currentPlayer){
+    private void addDrink(int difficulty, int currentPlayer) {
         GameSetupActivity.drinks.set(currentPlayer,
                 GameSetupActivity.drinks.get(currentPlayer) + GameSetupActivity.drinkLevel * (double) difficulty);
     }
